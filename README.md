@@ -12,8 +12,7 @@ The goals / steps of this project are the following:
 
 [//]: # (Image References)
 
-[image1]: ./examples/grayscale.jpg "Grayscale"
-
+![image1](examples/grayscale.jpg "Gray Scale")
 ---
 
 ### Reflection
@@ -22,53 +21,55 @@ The goals / steps of this project are the following:
 
 My pipeline consisted of 5 steps. 
 
-1. I converted the images to grayscale using helper function grayscale() which uses 
-   cv2.cvtColor(img,cv2.COLOR_RGB2GRAY) [Here it used cv2.COLOR_RGB2GRAY because the
-   image file is read by matplotlib image reader which reads image in RGB format.]
+     1. I converted the images to grayscale using helper function grayscale() which uses 
+        cv2.cvtColor(img,cv2.COLOR_RGB2GRAY) [Here it used cv2.COLOR_RGB2GRAY because the
+        image file is read by matplotlib image reader which reads image in RGB format.]
 
-2. Then I smoothed the grayscale image function using helper function gaussian_blur() which uses
-   cv2.GaussianBlur() . Here I fixed my kernel at  size 7 . I tested kernel of sizes 3,5,7,9. I 
-   found that kernel size of 7 best suits.
+     2.  Then I smoothed the grayscale image function using helper function gaussian_blur() 
+         which uses cv2.GaussianBlur() . Here I fixed my kernel at  size 7 . I tested kernel
+         of sizes 3,5,7,9. I found that kernel size of 7 best suits.
 
-3. Then I used canny edge detection technique to detect edges . Here I kept the minimum thresold 
-   value at 50 and maximum at 150. I used the helper function canny() which uses cv2.Canny() for 
-   edge detection.
+     3.  Then I used canny edge detection technique to detect edges . Here I kept the minimum
+         thresold value at 50 and maximum at 150. I used the helper function canny() which uses
+         cv2.Canny() for edge detection.
 
-4. Then I used the region_of_interest() helper function to select the region where the road exisist .
-   As all the image size is 540x960, so I used the vertices [(0,540),(457,327),(518,327),(960,540)]
-   to selt the region . It is a trapezium.
+     4. Then I used the region_of_interest() helper function to select the region where the road
+        exisist.As all the image size is 540x960, so I used the vertices [(0,540),(457,327),(518,327)
+        ,(960,540)] to selt the region . It is a trapezium.
 
-5. Now to detect lines I used the hough_lines() helper function . hough_lines() function uses 
-   probabilistic Hough Transform method by cv2.HoughLinesP() then followed by cv2.lines() function
-   for drawing lines. Here the cv2.HoughlinesP() takes five parameters.
-   These are ==> rho, theta, threshold, min_line_len, max_line_gap . 
-   I used the value rho = 2,theta = 1 degree,thresold = 20,min_line_len = 30,max_line_gap= 100 . 
-   In some cases I used values between 40-100 for max_line_gap parameter to join lines .
+     5. Now to detect lines I used the hough_lines() helper function . hough_lines() function uses 
+        probabilistic Hough Transform method by cv2.HoughLinesP() then followed by cv2.lines()
+        function for drawing lines. Here the cv2.HoughlinesP() takes five parameters.
+        These are ==> rho, theta, threshold, min_line_len, max_line_gap . 
+        I used the value rho = 2,theta = 1 degree,thresold = 20,min_line_len = 30,max_line_gap= 100 . 
+        In some cases I used values between 40-100 for max_line_gap parameter to join lines .
 
-6. Then I overlap the hough_lines() function output image with original color image using a alpha
-   value of 0.8.
+     6. Then I overlap the hough_lines() function output image with original color image using a alpha
+        value of 0.8.
 
-[//]: # (Image References)
+# Input Image
+![Input image](test_images/solidWhiteCurve.jpg)
 
-[image2]: ./test_images/solidWhiteCurve.jpg "Input image "
+# Output Image
 
-[//]: # (Image References)
-[image3]: ./test_images_output/solidWhiteCurve.jpg "Output image "
+![Output image](test_images_output/solidWhiteCurve.jpg) 
 
    
+---
+### **Steps For Improving draw_lines() function.**
+* In order to draw a single line on the left and right lanes, I modified the draw_lines() function. 
+* This function is basically used by hough_lines() function . 
+* First I calculated the gradients by grad = (y2-y1)/(x2-x1). Now if grad value is less than zero 
+  then co-ordinates [(x1,y1),(x2,y2)] corresponds to left line and for grad > 0 corresponds to right . 
+* Then I calculate the L2 norm for each lines in Left lane and Right Lane . In both lanes which line 
+  has maximum norm is the most prominent line . And I only took those two lines . 
+* Then I calculated the X-axis intercept to extend the lines. 
+* Now using these points I used cv2.line() function to draw the most prominent line . 
+* Here I modified some of the hogh_lines() functions parameter to get the best result as possible .
 
- 
-In order to draw a single line on the left and right lanes, I modified the draw_lines() function. 
-This function is basically used by hough_lines() function . First I calculated the gradients by
-grad = (y2-y1)/(x2-x1). Now if grad value is less than zero then co-ordinates [(x1,y1),(x2,y2)]
-corresponds to left line and for grad > 0 corresponds to right . Then I calculate the L2 norm for
-each lines in Left lane and Right Lane . In both lanes which line has maximum norm is the most 
-prominent line . And I only took those two lines . Then I calculated the X-axis intercept to extend
-the lines. Now using these points I used cv2.line() function to draw the most prominent line . Here
-I modified some of the hogh_lines() functions parameter to get the best result as possible . 
+# Output image after modifying drawlines function
 
-[//]: # (Image References)
-[image4]: ./test_images_output_modified/solidWhiteCurve.jpg "Output image "
+![Modified output](test_images_output_modified/solidWhiteCurve.jpg)
 
 
 ---
@@ -103,8 +104,12 @@ the vertices .
 ### 4. Working with video data
 
 For applying the pipeline fuction to a video stream first I imported the VideoFileClip class
-from moviepy.editor module . Then I instantiated the class with the video file given . Then I 
-used the fl_image() method to write my pipe line function to the video stream .
+from moviepy.editor module . 
+
+Then I instantiated the class with the video file given . 
+
+Then I used the fl_image() method to write my pipe line function to the video stream .
+
 
 ---
 
