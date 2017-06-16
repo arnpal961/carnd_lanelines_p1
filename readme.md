@@ -51,6 +51,8 @@ My pipeline consisted of 5 steps.
 [//]: # (Image References)
 
 [image2]: ./test_images/solidWhiteCurve.jpg "Input image "
+
+[//]: # (Image References)
 [image3]: ./test_images_output/solidWhiteCurve.jpg "Output image "
 
    
@@ -65,7 +67,7 @@ prominent line . And I only took those two lines . Then I calculated the X-axis 
 the lines. Now using these points I used cv2.line() function to draw the most prominent line . Here
 I modified some of the hogh_lines() functions parameter to get the best result as possible . 
 
-
+[//]: # (Image References)
 [image4]: ./test_images_output_modified/solidWhiteCurve.jpg "Output image "
 
 
