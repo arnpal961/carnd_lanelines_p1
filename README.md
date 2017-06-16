@@ -7,7 +7,7 @@
 
 The goals / steps of this project are the following:
 * Make a pipeline that finds lane lines on the road
-* Reflect on your work in a written report
+* Reflection of my work in these written report
 
 
 [//]: # (Image References)
